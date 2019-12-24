@@ -22,9 +22,13 @@ After running your function, the 2D grid should be:
   1  -1   2  -1
   0  -1   3   4
   
-``` 
+```
 
-### Implementation
+### Approach
+Iterate through the grid running a dfs on every single gate we encounter. During our dfs we stop if we have, gone out of the bounds of the grid, or if the cell we are currently on has a smaller distance than our current distance (this means there is another gate that is closer to it than the gate we are currently running a dfs on). Once we have finished iterating through the board we will have updated all reachable cells with their respective shortest distances to a gate.
+
+
+### Implementation - DFS
 ```java
 public static void wallsAndGates(int[][] rooms) {
 		if (rooms == null || rooms.length == 0)
