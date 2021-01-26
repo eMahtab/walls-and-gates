@@ -24,6 +24,47 @@ After running your function, the 2D grid should be:
   
 ```
 
+## Solution 1 : BFS
+```java
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        if(rooms == null || rooms.length == 0)
+            return;
+        int rows = rooms.length;
+        int columns = rooms[0].length;
+        
+        Queue<int[]> q = new LinkedList<>();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < columns; j++) {
+                if(rooms[i][j] == 0) {
+                    q.add(new int[]{i,j});
+                }
+            }
+        }
+        
+        int step = 0;
+        int[][] directions = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
+        while(!q.isEmpty()) {
+            step++;
+            int size = q.size();
+            for(int i = 0; i < size; i++) {
+                int[] pos = q.remove();
+                for(int[] direction : directions) {
+                    int x = pos[0] + direction[0];
+                    int y = pos[1] + direction[1];
+                    if(x < 0 || x >= rows || y < 0 || y >= columns || rooms[x][y] == -1)
+                        continue;
+                    if(rooms[x][y] == Integer.MAX_VALUE) {
+                        q.add(new int[]{x,y});
+                        rooms[x][y] = step;
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
 ### Approach
 Iterate through the grid running a dfs on every single gate we encounter. During our dfs we stop if we have, gone out of the bounds of the grid, or if the cell we are currently on has a smaller distance than our current distance (this means there is another gate that is closer to it than the gate we are currently running a dfs on). Once we have finished iterating through the board we will have updated all reachable cells with their respective shortest distances to a gate.
 
