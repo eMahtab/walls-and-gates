@@ -31,6 +31,54 @@ class Solution {
     public void wallsAndGates(int[][] rooms) {
         if(rooms == null || rooms.length == 0)
             return;
+        
+        int rows = rooms.length;
+        int cols = rooms[0].length;
+        
+        Queue<int[]> q = new LinkedList<>();
+        Set<String> set = new HashSet<>();
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                if(rooms[i][j] == 0) {
+                    q.add(new int[]{i,j});
+                    set.add(i+","+j);
+                }
+            }
+        }
+        int[][] directions = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}}; 
+        int distance = 0;
+        while(!q.isEmpty()) {
+            int size = q.size();
+            distance++;
+            for(int i = 0; i < size; i++) {
+                int[] pos = q.remove();
+                for(int[] move : directions) {
+                    int x = pos[0] + move[0];
+                    int y = pos[1] + move[1];
+                    if(x >=0 && x < rows && y >= 0 && y < cols 
+                       && rooms[x][y] == Integer.MAX_VALUE && !set.contains(x+","+y)) {
+                        q.add(new int[]{x,y});
+                        rooms[x][y] = distance;
+                        set.add(x+","+y);
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+## Note : 
+
+We can utilize the fact, that distance from the gate will always be less than Integer.MAX_VALUE (we are given this info, in the question).
+We don't need the `Set` to keep track that a cell is already filled or not.
+
+## Solution 2 : BFS 
+```java
+class Solution {
+    public void wallsAndGates(int[][] rooms) {
+        if(rooms == null || rooms.length == 0)
+            return;
         int rows = rooms.length;
         int columns = rooms[0].length;
         
